@@ -17,7 +17,7 @@ const Spinner = () => (
   </div>
 );
 
-export default function Home() {
+export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
