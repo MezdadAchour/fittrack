@@ -1,113 +1,93 @@
-'use client'
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faDumbbell, faTrophy, faBell } from '@fortawesome/free-solid-svg-icons';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+"use client";
 
-type WorkoutEntry = {
-  date: Date;
-  workout: string;
-};
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrophy, faBell, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { getDataFromLocalStorage } from '@/utils/storage';
+
+import { Workout } from '@/utils/types';
 
 const DashboardPage: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [workoutEntries, setWorkoutEntries] = useState<WorkoutEntry[]>([]);
-  const [newWorkout, setNewWorkout] = useState<string>('');
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
+  const [totalWorkouts, setTotalWorkouts] = useState(0);
+  const [totalTime, setTotalTime] = useState(0); // en minutes
+  const [totalDistance, setTotalDistance] = useState(0); // en kilomètres
 
-  const handleDateChange = (value: Date | Date[]) => {
-    if (value instanceof Date) {
-      setSelectedDate(value);
-    }
-  };
+  useEffect(() => {
+    const data = getDataFromLocalStorage();
+    setWorkouts(data.workouts);
 
-  const handleAddWorkout = () => {
-    if (newWorkout.trim() !== '') {
-      setWorkoutEntries([...workoutEntries, { date: selectedDate, workout: newWorkout }]);
-      setNewWorkout('');
-    }
-  };
+    // Calculer les statistiques
+    setTotalWorkouts(data.workouts.length);
+    setTotalTime(data.workouts.reduce((acc, workout) => acc + workout.duration, 0));
+    setTotalDistance(data.workouts.reduce((acc, workout) => acc + workout.distance, 0)); // Assure-toi d'avoir ces champs dans Workout
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <header className="bg-gray-800 p-4">
-        <h1 className="text-2xl font-bold">FitTrack - Tableau de bord</h1>
-      </header>
-      
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <section className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
-              Calendrier d'entraînement
-            </h2>
-            <Calendar
-              onChange={handleDateChange}
-              value={selectedDate}
-              className="bg-white text-gray-900 rounded-lg"
-            />
-            <div className="mt-4">
-              <input
-                type="text"
-                value={newWorkout}
-                onChange={(e) => setNewWorkout(e.target.value)}
-                placeholder="Ajouter un entraînement"
-                className="w-full p-2 bg-gray-700 rounded"
-              />
-              <button
-                onClick={handleAddWorkout}
-                className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Ajouter
-              </button>
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <motion.h1
+          className="text-4xl font-bold mb-8 text-center"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Tableau de Bord
+        </motion.h1>
+
+        {/* Section Statistiques */}
+        <section className="bg-gray-800 p-8 rounded-2xl shadow-xl mb-10">
+          <h2 className="text-2xl font-semibold mb-6">
+            <FontAwesomeIcon icon={faChartLine} className="mr-3" />
+            Statistiques Générales
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gray-700 p-6 rounded-xl text-center">
+              <p className="text-3xl font-bold">{totalWorkouts}</p>
+              <p className="text-gray-400">Entraînements Total</p>
             </div>
-          </section>
-          
-          <section className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              <FontAwesomeIcon icon={faDumbbell} className="mr-2" />
-              Derniers entraînements
-            </h2>
-            <ul>
-              {workoutEntries.slice(-5).reverse().map((entry, index) => (
-                <li key={index} className="mb-2">
-                  {entry.date.toLocaleDateString()} - {entry.workout}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-          <section className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              <FontAwesomeIcon icon={faTrophy} className="mr-2" />
-              Objectifs en cours
-            </h2>
-            <ul>
-              <li>Courir 5km en moins de 25 minutes</li>
-              <li>Soulever 100kg au développé couché</li>
-              <li>Faire 50 pompes d'affilée</li>
-            </ul>
-          </section>
-          
-          <section className="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold mb-4">
-              <FontAwesomeIcon icon={faBell} className="mr-2" />
-              Notifications
-            </h2>
-            <ul>
-              <li>Rappel: Entraînement de course prévu demain</li>
-              <li>Nouveau défi disponible: 30 jours de yoga</li>
-              <li>Félicitations! Vous avez atteint votre objectif de pas cette semaine</li>
-            </ul>
-          </section>
-        </div>
+            <div className="bg-gray-700 p-6 rounded-xl text-center">
+              <p className="text-3xl font-bold">{totalTime} min</p>
+              <p className="text-gray-400">Heures d'Entraînement</p>
+            </div>
+            <div className="bg-gray-700 p-6 rounded-xl text-center">
+              <p className="text-3xl font-bold">{totalDistance} km</p>
+              <p className="text-gray-400">Distance Totale Courue</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section Objectifs en cours */}
+        <section className="bg-gray-800 p-8 rounded-2xl shadow-xl mb-10">
+          <h2 className="text-2xl font-semibold mb-6">
+            <FontAwesomeIcon icon={faTrophy} className="mr-3" />
+            Objectifs en cours
+          </h2>
+          <ul className="space-y-3">
+            <li className="bg-gray-700 p-4 rounded-xl">Courir 5km en moins de 25 minutes</li>
+            <li className="bg-gray-700 p-4 rounded-xl">Soulever 100kg au développé couché</li>
+            <li className="bg-gray-700 p-4 rounded-xl">Faire 50 pompes d'affilée</li>
+          </ul>
+        </section>
+
+        {/* Section Notifications */}
+        <section className="bg-gray-800 p-8 rounded-2xl shadow-xl">
+          <h2 className="text-2xl font-semibold mb-6">
+            <FontAwesomeIcon icon={faBell} className="mr-3" />
+            Notifications
+          </h2>
+          <ul className="space-y-3">
+            <li className="bg-gray-700 p-4 rounded-xl">Rappel: Entraînement de course prévu demain</li>
+            <li className="bg-gray-700 p-4 rounded-xl">Nouveau défi disponible: 30 jours de yoga</li>
+            <li className="bg-gray-700 p-4 rounded-xl">Félicitations! Vous avez atteint votre objectif de pas cette semaine</li>
+          </ul>
+        </section>
       </main>
-      
-      <footer className="bg-gray-800 p-4 mt-8 text-center">
-        <p>&copy; 2024 FitTrack. Tous droits réservés.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

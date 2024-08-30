@@ -1,108 +1,55 @@
-'use client';
-import { motion } from 'framer-motion';
-import Link from 'next/link';
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+"use client";
+
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import DashboardSummary from '@/components/DashboardSummary';
+import RecentWorkouts from '@/components/RecentWorkouts';
+import FitnessGoals from '@/components/FitnessGoals';
+import ProgressChart from '@/components/ProgressChart';
+import Notifications from '@/components/Notifications';
+import UserProfile from '@/components/UserProfile';
+
+// Composant Spinner pour le chargement
+const Spinner = () => (
+  <div className="flex justify-center items-center h-screen bg-gray-900">
+    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+  </div>
+);
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simuler le chargement des données
+    const timer = setTimeout(() => setLoading(false), 1000);
+
+    // Nettoyer le timeout si le composant est démonté
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="py-20 text-center">
-          <motion.h1 
-            className="text-5xl font-bold mb-6"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            Transformez votre vie avec FitTrack
-          </motion.h1>
-          <motion.p 
-            className="text-xl mb-10 max-w-2xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Suivez vos entraînements, fixez des objectifs et voyez vos progrès comme jamais auparavant.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <Link 
-              href="/signup" 
-              className="bg-blue-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition duration-300"
-            >
-              Commencez gratuitement
-            </Link>
-          </motion.div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-20 bg-gray-800">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">Fonctionnalités principales</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <FeatureCard 
-                title="Suivi des entraînements" 
-                description="Enregistrez facilement vos séances et suivez vos performances."
-                icon="📊"
-              />
-              <FeatureCard 
-                title="Objectifs personnalisés" 
-                description="Fixez des objectifs réalistes et suivez vos progrès."
-                icon="🎯"
-              />
-              <FeatureCard 
-                title="Analyses détaillées" 
-                description="Obtenez des insights sur vos performances et votre progression."
-                icon="📈"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonial Section */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-12">Ce que disent nos utilisateurs</h2>
-            <blockquote className="text-2xl italic mb-4">
-              "FitTrack a complètement changé ma façon de m'entraîner. Je n'ai jamais été aussi motivé !"
-            </blockquote>
-            <p className="text-gray-400">- Marie D., utilisatrice depuis 6 mois</p>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-20 bg-blue-600">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">Prêt à transformer votre vie ?</h2>
-            <Link 
-              href="/signup" 
-              className="bg-white text-blue-600 px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-100 transition duration-300"
-            >
-              Rejoignez-nous maintenant
-            </Link>
-          </div>
-        </section>
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8 text-center">Bienvenue sur FitTrack</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <DashboardSummary />
+          <RecentWorkouts />
+          <FitnessGoals />
+          <ProgressChart />
+          <Notifications />
+          <UserProfile />
+        </div>
       </main>
       <Footer />
     </div>
   );
 }
-
-const FeatureCard = ({ title, description, icon }) => (
-  <motion.div 
-    className="bg-gray-700 p-6 rounded-lg shadow-lg"
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <div className="text-4xl mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
-    <p className="text-gray-400">{description}</p>
-  </motion.div>
-);
