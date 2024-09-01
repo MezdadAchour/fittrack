@@ -1,150 +1,151 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDumbbell, faLayerGroup, faRepeat, faWeight, faClock } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect } from 'react';
 import { Workout } from '@/utils/types';
 
 interface WorkoutFormProps {
-  onAddWorkout: (workout: Workout) => void;
+  onAddWorkout: (workout: Omit<Workout, 'id' | 'date'>) => void;
+  onEditWorkout: (workout: Omit<Workout, 'id'>) => void;
   selectedDate: Date;
+  editingWorkout: Workout | null;
+  onCancel: () => void;
 }
 
-const WorkoutForm: React.FC<WorkoutFormProps> = ({ onAddWorkout, selectedDate }) => {
-  const [workout, setWorkout] = useState<Workout>({
-    id: '',
-    exercise: '',
-    sets: 0,
-    reps: 0,
-    weight: 0,
-    duration: 0,
-    date: selectedDate.toISOString().split('T')[0]
-  });
+const WorkoutForm: React.FC<WorkoutFormProps> = ({
+  onAddWorkout,
+  onEditWorkout,
+  selectedDate,
+  editingWorkout,
+  onCancel
+}) => {
+  const [exercise, setExercise] = useState('');
+  const [sets, setSets] = useState('');
+  const [reps, setReps] = useState('');
+  const [weight, setWeight] = useState('');
+  const [duration, setDuration] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setWorkout(prev => ({
-      ...prev,
-      [name]: name === 'exercise' ? value : Number(value),
-      date: selectedDate.toISOString().split('T')[0]
-    }));
-  };
+  useEffect(() => {
+    if (editingWorkout) {
+      setExercise(editingWorkout.exercise);
+      setSets(editingWorkout.sets.toString());
+      setReps(editingWorkout.reps.toString());
+      setWeight(editingWorkout.weight.toString());
+      setDuration(editingWorkout.duration.toString());
+    } else {
+      setExercise('');
+      setSets('');
+      setReps('');
+      setWeight('');
+      setDuration('');
+    }
+  }, [editingWorkout]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddWorkout({ ...workout, id: Date.now().toString() });
-    setWorkout({
-      id: '',
-      exercise: '',
-      sets: 0,
-      reps: 0,
-      weight: 0,
-      duration: 0,
-      date: selectedDate.toISOString().split('T')[0]
-    });
-  };
+    const workoutData = {
+      exercise,
+      sets: parseInt(sets),
+      reps: parseInt(reps),
+      weight: parseFloat(weight),
+      duration: parseInt(duration),
+      date: selectedDate.toISOString().split('T')[0],
+    };
 
-  const inputVariants = {
-    focus: { scale: 1.05, transition: { duration: 0.3 } },
-    blur: { scale: 1, transition: { duration: 0.3 } }
+    if (editingWorkout) {
+      onEditWorkout(workoutData);
+    } else {
+      onAddWorkout(workoutData);
+    }
+
+    setExercise('');
+    setSets('');
+    setReps('');
+    setWeight('');
+    setDuration('');
   };
 
   return (
-    <motion.form
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      onSubmit={handleSubmit}
-      className="space-y-6"
-    >
-      <motion.div
-        variants={inputVariants}
-        whileFocus="focus"
-        className="relative"
-      >
-        <FontAwesomeIcon icon={faDumbbell} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label htmlFor="exercise" className="block text-sm font-medium text-gray-300">
+          Exercice
+        </label>
         <input
           type="text"
-          name="exercise"
-          placeholder="Exercice"
-          value={workout.exercise}
-          onChange={handleChange}
-          className="w-full pl-10 pr-4 py-3 bg-gray-700 bg-opacity-50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          id="exercise"
+          value={exercise}
+          onChange={(e) => setExercise(e.target.value)}
+          required
+          className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
         />
-      </motion.div>
-      <div className="grid grid-cols-2 gap-4">
-        <motion.div
-          variants={inputVariants}
-          whileFocus="focus"
-          className="relative"
-        >
-          <FontAwesomeIcon icon={faLayerGroup} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="number"
-            name="sets"
-            placeholder="Séries"
-            value={workout.sets || ''}
-            onChange={handleChange}
-            className="w-full pl-10 pr-4 py-3 bg-gray-700 bg-opacity-50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-          />
-        </motion.div>
-        <motion.div
-          variants={inputVariants}
-          whileFocus="focus"
-          className="relative"
-        >
-          <FontAwesomeIcon icon={faRepeat} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="number"
-            name="reps"
-            placeholder="Répétitions"
-            value={workout.reps || ''}
-            onChange={handleChange}
-            className="w-full pl-10 pr-4 py-3 bg-gray-700 bg-opacity-50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-          />
-        </motion.div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <motion.div
-          variants={inputVariants}
-          whileFocus="focus"
-          className="relative"
-        >
-          <FontAwesomeIcon icon={faWeight} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="number"
-            name="weight"
-            placeholder="Poids (kg)"
-            value={workout.weight || ''}
-            onChange={handleChange}
-            className="w-full pl-10 pr-4 py-3 bg-gray-700 bg-opacity-50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-          />
-        </motion.div>
-        <motion.div
-          variants={inputVariants}
-          whileFocus="focus"
-          className="relative"
-        >
-          <FontAwesomeIcon icon={faClock} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="number"
-            name="duration"
-            placeholder="Durée (minutes)"
-            value={workout.duration || ''}
-            onChange={handleChange}
-            className="w-full pl-10 pr-4 py-3 bg-gray-700 bg-opacity-50 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-          />
-        </motion.div>
+      <div>
+        <label htmlFor="sets" className="block text-sm font-medium text-gray-300">
+          Séries
+        </label>
+        <input
+          type="number"
+          id="sets"
+          value={sets}
+          onChange={(e) => setSets(e.target.value)}
+          required
+          className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
       </div>
-      <p className="text-gray-400 text-center">Date sélectionnée : {new Date(selectedDate).toLocaleDateString()}</p>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 font-semibold text-lg shadow-lg"
-      >
-        Ajouter Entraînement
-      </motion.button>
-    </motion.form>
+      <div>
+        <label htmlFor="reps" className="block text-sm font-medium text-gray-300">
+          Répétitions
+        </label>
+        <input
+          type="number"
+          id="reps"
+          value={reps}
+          onChange={(e) => setReps(e.target.value)}
+          required
+          className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+      <div>
+        <label htmlFor="weight" className="block text-sm font-medium text-gray-300">
+          Poids (kg)
+        </label>
+        <input
+          type="number"
+          id="weight"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+          step="0.1"
+          required
+          className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+      <div>
+        <label htmlFor="duration" className="block text-sm font-medium text-gray-300">
+          Durée (minutes)
+        </label>
+        <input
+          type="number"
+          id="duration"
+          value={duration}
+          onChange={(e) => setDuration(e.target.value)}
+          required
+          className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        />
+      </div>
+      <div className="flex justify-end space-x-3">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+        >
+          Annuler
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          {editingWorkout ? 'Mettre à jour' : 'Ajouter'}
+        </button>
+      </div>
+    </form>
   );
 };
 

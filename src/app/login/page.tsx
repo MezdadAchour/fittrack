@@ -1,19 +1,39 @@
 "use client";
 
 import React from 'react';
+import { motion } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import Login from '@/components/Login';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 const LoginPage: React.FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 text-white">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-md mx-auto bg-gray-800 p-8 rounded-2xl shadow-xl">
-          <h1 className="text-3xl font-bold mb-6 text-center">Connexion</h1>
-          <Login />
-        </div>
+      <main className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center">
+        <motion.div 
+          className="w-full max-w-md"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg">
+            <h1 className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">Connexion</h1>
+            <Login />
+            <div className="mt-6 text-center">
+              <p className="text-gray-400">Pas encore de compte ?</p>
+              <Link 
+                href="/register" 
+                className="text-blue-400 hover:text-blue-300 transition duration-300"
+              >
+                Inscrivez-vous ici
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </main>
       <Footer />
     </div>

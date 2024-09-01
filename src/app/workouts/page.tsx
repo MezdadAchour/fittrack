@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faDumbbell, faTrophy, faBell, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -10,20 +10,58 @@ import WorkoutForm from '@/components/WorkoutForm';
 import WorkoutList from '@/components/WorkoutList';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Workout as WorkoutType } from '@/utils/types';
+import { Workout, WorkoutStats } from '@/utils/types';
 
 const WorkoutsPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [workouts, setWorkouts] = useState<WorkoutType[]>([]);
+  const [workouts, setWorkouts] = useState<Workout[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('workouts');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [editingWorkout, setEditingWorkout] = useState<Workout | null>(null);
+  const [workoutStats, setWorkoutStats] = useState<WorkoutStats>({
+    totalWorkouts: 0,
+    uniqueWorkoutTypes: 0,
+    totalDuration: 0,
+    averageDuration: 0,
+    workoutsByType: {},
+  });
+
+  useEffect(() => {
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+    updateWorkoutStats();
+  }, [workouts]);
+
+  useEffect(() => {
+    updateWorkoutStats();
+  }, [workouts]);
+
+  const updateWorkoutStats = () => {
+    const stats: WorkoutStats = {
+      totalWorkouts: workouts.length,
+      uniqueWorkoutTypes: new Set(workouts.map(w => w.exercise)).size,
+      totalDuration: workouts.reduce((total, w) => total + w.duration, 0),
+      averageDuration: workouts.length > 0 ? workouts.reduce((total, w) => total + w.duration, 0) / workouts.length : 0,
+      workoutsByType: workouts.reduce((acc, w) => {
+        acc[w.exercise] = (acc[w.exercise] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>),
+    };
+    setWorkoutStats(stats);
+  };
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
     setIsFormVisible(true);
+    setEditingWorkout(null);
   };
 
-  const handleAddWorkout = (workout: Omit<WorkoutType, 'id' | 'date'>) => {
-    const newWorkout: WorkoutType = {
+  const handleAddWorkout = (workout: Omit<Workout, 'id' | 'date'>) => {
+    const newWorkout: Workout = {
       ...workout,
       id: Date.now().toString(),
       date: selectedDate.toISOString().split('T')[0],
@@ -36,23 +74,25 @@ const WorkoutsPage: React.FC = () => {
     setWorkouts(prevWorkouts => prevWorkouts.filter(workout => workout.id !== id));
   };
 
-  const handleEditWorkout = (id: string, updatedWorkout: Omit<WorkoutType, 'id'>) => {
-    setWorkouts(prevWorkouts => prevWorkouts.map(workout =>
-      workout.id === id ? { ...updatedWorkout, id } : workout
-    ));
+  const handleStartEditWorkout = (workout: Workout) => {
+    setEditingWorkout(workout);
+    setSelectedDate(new Date(workout.date));
+    setIsFormVisible(true);
   };
 
-  const calendarStyles = {
-    wrapper: "bg-gray-800 bg-opacity-70 rounded-3xl p-4 shadow-xl",
-    headerWrapper: "bg-transparent",
-    headerTitle: "text-white font-bold",
-    headerSubtitle: "text-gray-300",
-    weekdayText: "text-blue-400 font-semibold",
-    dayWrapper: "hover:bg-blue-600 rounded-full transition-colors duration-200",
-    daySelected: "bg-blue-500 text-white",
-    dayToday: "border-2 border-purple-500",
-    dayInRange: "bg-blue-400 text-white",
-    dayDisabled: "text-gray-500 hover:bg-transparent",
+  const handleEditWorkout = (updatedWorkout: Omit<Workout, 'id'>) => {
+    setWorkouts(prevWorkouts =>
+      prevWorkouts.map(workout =>
+        workout.id === editingWorkout?.id ? { ...updatedWorkout, id: workout.id } : workout
+      )
+    );
+    setEditingWorkout(null);
+    setIsFormVisible(false);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingWorkout(null);
+    setIsFormVisible(false);
   };
 
   return (
@@ -79,12 +119,14 @@ const WorkoutsPage: React.FC = () => {
               <FontAwesomeIcon icon={faCalendarAlt} className="mr-4 text-blue-400" />
               Calendrier d'entraînement
             </h2>
-            <Calendar 
-              aria-label="Date de l'entraînement"
-              defaultValue={parseDate(selectedDate.toISOString().split('T')[0])}
-              onChange={(date) => handleDateChange(new Date(date.toDate('UTC')))}
-              className="bg-gray-700 bg-opacity-50 rounded-3xl p-4 shadow-inner w-72 h-81"
-/>
+            <div className="grid place-items-center">
+              <Calendar 
+                 aria-label="Date de l'entraînement"
+                 defaultValue={parseDate(selectedDate.toISOString().split('T')[0])}
+                 onChange={(date) => handleDateChange(new Date(date.toDate('UTC')))}
+                 className="bg-gray-700 bg-opacity-50 rounded-3xl p-4 shadow-inner w-72 h-81"
+               />
+            </div>
           </motion.section>
           
           <AnimatePresence>
@@ -98,9 +140,15 @@ const WorkoutsPage: React.FC = () => {
               >
                 <h2 className="text-3xl font-semibold mb-6 flex items-center">
                   <FontAwesomeIcon icon={faDumbbell} className="mr-4 text-purple-400" />
-                  Ajouter un entraînement
+                  {editingWorkout ? "Modifier l'entraînement" : "Ajouter un entraînement"}
                 </h2>
-                <WorkoutForm onAddWorkout={handleAddWorkout} selectedDate={selectedDate} />
+                <WorkoutForm
+                  onAddWorkout={handleAddWorkout}
+                  onEditWorkout={handleEditWorkout}
+                  selectedDate={selectedDate}
+                  editingWorkout={editingWorkout}
+                  onCancel={handleCancelEdit}
+                />
               </motion.section>
             ) : (
               <motion.div
@@ -146,7 +194,7 @@ const WorkoutsPage: React.FC = () => {
           ) : (
             <WorkoutList 
               workouts={workouts} 
-              onEdit={handleEditWorkout} 
+              onEdit={handleStartEditWorkout} 
               onDelete={handleDeleteWorkout} 
             />
           )}
@@ -161,20 +209,13 @@ const WorkoutsPage: React.FC = () => {
           >
             <h2 className="text-3xl font-semibold mb-6 flex items-center">
               <FontAwesomeIcon icon={faTrophy} className="mr-4 text-yellow-400" />
-              Objectifs en cours
+              Statistiques d'entraînement
             </h2>
             <ul className="space-y-4">
-              {['Courir 5km en moins de 25 minutes', 'Soulever 100kg au développé couché', 'Faire 50 pompes d\'affilée'].map((goal, index) => (
-                <motion.li 
-                  key={index}
-                  className="bg-gray-700 bg-opacity-50 p-5 rounded-2xl shadow-inner"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  {goal}
-                </motion.li>
-              ))}
+              <li>Total des entraînements: {workoutStats.totalWorkouts}</li>
+              <li>Types d'entraînements uniques: {workoutStats.uniqueWorkoutTypes}</li>
+              <li>Durée totale: {workoutStats.totalDuration} minutes</li>
+              <li>Durée moyenne: {workoutStats.averageDuration.toFixed(2)} minutes</li>
             </ul>
           </motion.section>
           
@@ -186,19 +227,13 @@ const WorkoutsPage: React.FC = () => {
           >
             <h2 className="text-3xl font-semibold mb-6 flex items-center">
               <FontAwesomeIcon icon={faBell} className="mr-4 text-red-400" />
-              Notifications
+              Entraînements par type
             </h2>
             <ul className="space-y-4">
-              {['Rappel: Entraînement de course prévu demain', 'Nouveau défi disponible: 30 jours de yoga', 'Félicitations! Vous avez atteint votre objectif de pas cette semaine'].map((notification, index) => (
-                <motion.li 
-                  key={index}
-                  className="bg-gray-700 bg-opacity-50 p-5 rounded-2xl shadow-inner"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  {notification}
-                </motion.li>
+              {Object.entries(workoutStats.workoutsByType).map(([type, count]) => (
+                <li key={type}>
+                  {type}: {count}
+                </li>
               ))}
             </ul>
           </motion.section>

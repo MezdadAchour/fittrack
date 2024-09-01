@@ -6,6 +6,7 @@ export interface Workout {
   weight: number;
   duration: number;
   date: string;
+  type?: string;
 }
 
 export interface WorkoutStats {
