@@ -92,22 +92,19 @@ export default function Home() {
           >
             Suivez vos entraînements, fixez des objectifs et voyez vos progrès comme jamais auparavant.
           </motion.p>
-          <motion.div
-            className="space-x-4"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <div className="flex flex-col space-y-4">
-            <Link href="/register" className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg">
-              Commencer maintenant
-            </Link>
-            <Link href="/login" className="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-600 transition duration-300 shadow-lg">
-              Se connecter
-            </Link>
-
-      </div>
-          </motion.div>
+    <motion.div
+      className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4  items-center justify-center"
+      initial={{ scale: 0.9 }}
+      animate={{ scale: 1 }}
+      transition={{ duration: 0.5, delay: 0.6 }}
+    >
+      <Link href="/register" className="bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg text-center">
+        Commencer maintenant
+      </Link>
+      <Link href="/login" className="bg-gray-700 text-white px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg font-semibold hover:bg-gray-600 transition duration-300 shadow-lg text-center">
+        Se connecter
+      </Link>
+    </motion.div>
         </motion.section>
 
         {/* Features Section */}
