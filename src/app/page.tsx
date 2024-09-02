@@ -9,6 +9,45 @@ import { faDumbbell, faBullseye, faChartLine, faUsers, faCalendarCheck } from '@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+// Types pour les props de FeatureCard
+interface FeatureCardProps {
+  title: string;
+  description: string;
+  icon: IconDefinition;
+}
+
+// Types pour les props de TestimonialCard
+interface TestimonialCardProps {
+  quote: string;
+  author: string;
+}
+
+const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
+  <motion.div 
+    className="bg-gray-700 bg-opacity-50 p-6 rounded-3xl shadow-2xl backdrop-blur-lg"
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    whileHover={{ scale: 1.05 }}
+  >
+    <FontAwesomeIcon icon={icon} className="text-4xl mb-4 text-blue-400" />
+    <h3 className="text-xl font-semibold mb-2">{title}</h3>
+    <p className="text-gray-300">{description}</p>
+  </motion.div>
+);
+
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author }) => (
+  <motion.div 
+    className="bg-gray-700 bg-opacity-50 p-6 rounded-3xl shadow-2xl backdrop-blur-lg"
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5 }}
+  >
+    <blockquote className="text-lg italic mb-4">{quote}</blockquote>
+    <p className="text-gray-400">- {author}</p>
+  </motion.div>
+);
+
 export default function Home() {
   const [activeTip, setActiveTip] = useState(0);
   const tips = [
@@ -74,6 +113,7 @@ export default function Home() {
           </motion.div>
         </motion.section>
 
+
         {/* Features Section */}
         <section className="py-20 bg-gray-800 bg-opacity-50 backdrop-blur-lg">
           <div className="container mx-auto px-4">
@@ -97,7 +137,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-
+        
         {/* Community Section */}
         <section className="py-20">
           <div className="container mx-auto px-4 text-center">
