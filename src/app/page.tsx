@@ -52,7 +52,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author, imageS
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5 }}
   >
-    <div className="relative z-10 h-full flex flex-col justify-between">
+    <div className="relative z-10 h-full flex flex-col justify-center items-center text-center">
       <blockquote className="text-lg italic mb-4">{quote}</blockquote>
       <p className="text-gray-400">- {author}</p>
     </div>
@@ -61,6 +61,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author, imageS
     </div>
   </motion.div>
 );
+
 
 const FluidBackground: React.FC = () => (
   <div className="absolute inset-0 overflow-hidden">
