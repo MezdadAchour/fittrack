@@ -98,12 +98,15 @@ export default function Home() {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
+            <div className="flex flex-col space-y-4">
             <Link href="/register" className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg">
               Commencer maintenant
             </Link>
             <Link href="/login" className="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-600 transition duration-300 shadow-lg">
               Se connecter
             </Link>
+
+      </div>
           </motion.div>
         </motion.section>
 
