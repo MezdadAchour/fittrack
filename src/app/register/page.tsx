@@ -7,6 +7,7 @@ import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import Register from '@/components/Register';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 const RegisterPage: React.FC = () => {
   return (
@@ -32,7 +33,9 @@ const RegisterPage: React.FC = () => {
             <Register />
             <div className="mt-6 text-center">
               <p className="text-gray-400">Vous avez déjà un compte ?</p>
-              <a href="/login" className="text-blue-400 hover:text-blue-300 transition duration-300">Connectez-vous ici</a>
+              <Link href="/login" className="text-blue-400 hover:text-blue-300 transition duration-300">
+                Connectez-vous ici
+              </Link>
             </div>
           </div>
         </motion.div>

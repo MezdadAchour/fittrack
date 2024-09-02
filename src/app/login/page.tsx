@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Login from '@/components/Login';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -21,7 +21,15 @@ const LoginPage: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <div className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg">
-            <h1 className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">Connexion</h1>
+            <motion.h1 
+              className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
+              initial={{ y: -20 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <FontAwesomeIcon icon={faUser} className="mr-2" />
+              Connexion
+            </motion.h1>
             <Login />
             <div className="mt-6 text-center">
               <p className="text-gray-400">Pas encore de compte ?</p>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ const Register: React.FC = () => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
@@ -24,7 +24,6 @@ const Register: React.FC = () => {
     }
 
     localStorage.setItem(email, JSON.stringify({ password }));
-    alert('Inscription réussie');
     router.push('/login');
   };
 
@@ -36,7 +35,7 @@ const Register: React.FC = () => {
             Email
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="email"
             type="email"
             placeholder="Email"
@@ -50,7 +49,7 @@ const Register: React.FC = () => {
             Mot de passe
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 bg-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="password"
             type="password"
             placeholder="******************"
@@ -64,7 +63,7 @@ const Register: React.FC = () => {
             Confirmer le mot de passe
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 bg-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="confirm-password"
             type="password"
             placeholder="******************"
@@ -76,7 +75,7 @@ const Register: React.FC = () => {
         {error && <p className="text-red-500 text-xs italic mb-4">{error}</p>}
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
             type="submit"
           >
             S'inscrire
@@ -84,7 +83,7 @@ const Register: React.FC = () => {
         </div>
       </form>
       <p className="text-center text-gray-500 text-xs">
-        Déjà un compte? <Link href="/login" className="text-blue-500 hover:text-blue-800">Se connecter</Link>
+        Déjà un compte? <Link href="/login" className="text-blue-500 hover:text-blue-800 transition duration-300">Se connecter</Link>
       </p>
     </div>
   );

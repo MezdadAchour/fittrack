@@ -8,7 +8,7 @@ interface FooterLinkProps {
 
 const FooterLink = ({ href, children }: FooterLinkProps) => (
   <li>
-    <Link href={href}>
+    <Link href={href} passHref legacyBehavior>
       <motion.a
         className="text-gray-400 hover:text-white transition duration-300"
         whileHover={{ x: 5 }}

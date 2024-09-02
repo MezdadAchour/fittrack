@@ -13,7 +13,7 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ href, children, mobile = false }: NavLinkProps) => (
-  <Link href={href}>
+  <Link href={href} passHref legacyBehavior>
     <motion.a
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -30,7 +30,7 @@ const Header = () => {
   return (
     <header className="bg-gray-800 bg-opacity-70 backdrop-blur-lg shadow-xl text-white sticky top-0 z-50">
       <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <Link href="/">
+        <Link href="/" passHref legacyBehavior>
           <motion.a
             whileHover={{ scale: 1.05 }}
             className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"

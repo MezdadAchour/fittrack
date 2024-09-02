@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
@@ -24,8 +24,8 @@ const Login: React.FC = () => {
       return;
     }
 
-    alert('Connexion réussie');
-    router.push('/dashboard');
+    localStorage.setItem('currentUser', email);
+    router.push('/workouts');
   };
 
   return (
@@ -36,7 +36,7 @@ const Login: React.FC = () => {
             Email
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="email"
             type="email"
             placeholder="Email"
@@ -50,10 +50,10 @@ const Login: React.FC = () => {
             Mot de passe
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 bg-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
             id="password"
             type="password"
-            placeholder="******************"
+            placeholder="**********"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -62,18 +62,18 @@ const Login: React.FC = () => {
         {error && <p className="text-red-500 text-xs italic mb-4">{error}</p>}
         <div className="flex items-center justify-between">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
             type="submit"
           >
             Se connecter
           </button>
-          <Link href="/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+          <Link href="/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 transition duration-300">
             Mot de passe oublié?
           </Link>
         </div>
       </form>
       <p className="text-center text-gray-500 text-xs">
-        Pas encore de compte? <Link href="/register" className="text-blue-500 hover:text-blue-800">S'inscrire</Link>
+        Pas encore de compte? <Link href="/register" className="text-blue-500 hover:text-blue-800 transition duration-300">S'inscrire</Link>
       </p>
     </div>
   );
