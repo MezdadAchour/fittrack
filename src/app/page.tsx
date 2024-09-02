@@ -9,17 +9,10 @@ import { faDumbbell, faBullseye, faChartLine, faUsers, faCalendarCheck } from '@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-// Types pour les props de FeatureCard
 interface FeatureCardProps {
   title: string;
   description: string;
   icon: IconDefinition;
-}
-
-// Types pour les props de TestimonialCard
-interface TestimonialCardProps {
-  quote: string;
-  author: string;
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
@@ -35,6 +28,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) =
     <p className="text-gray-300">{description}</p>
   </motion.div>
 );
+
+interface TestimonialCardProps {
+  quote: string;
+  author: string;
+}
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author }) => (
   <motion.div 
@@ -98,21 +96,14 @@ export default function Home() {
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            <Link 
-              href="/register" 
-              className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg"
-            >
+            <Link href="/register" className="bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-lg">
               Commencer maintenant
             </Link>
-            <Link 
-              href="/login" 
-              className="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-600 transition duration-300 shadow-lg"
-            >
+            <Link href="/login" className="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-600 transition duration-300 shadow-lg">
               Se connecter
             </Link>
           </motion.div>
         </motion.section>
-
 
         {/* Features Section */}
         <section className="py-20 bg-gray-800 bg-opacity-50 backdrop-blur-lg">
@@ -137,7 +128,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        
+
         {/* Community Section */}
         <section className="py-20">
           <div className="container mx-auto px-4 text-center">
@@ -146,10 +137,7 @@ export default function Home() {
               <div>
                 <FontAwesomeIcon icon={faUsers} className="text-6xl mb-6 text-purple-500" />
                 <p className="text-xl mb-6">Connectez-vous avec d'autres passionnés de fitness, partagez vos succès et motivez-vous mutuellement.</p>
-                <Link 
-                  href="/community" 
-                  className="bg-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-lg"
-                >
+                <Link href="/community" className="bg-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-lg">
                   Explorer la communauté
                 </Link>
               </div>
@@ -198,10 +186,7 @@ export default function Home() {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">Prêt à transformer votre vie ?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto">Rejoignez FitTrack aujourd'hui et commencez votre voyage vers une meilleure version de vous-même.</p>
-            <Link 
-              href="/register" 
-              className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg inline-flex items-center"
-            >
+            <Link href="/register" className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg inline-flex items-center">
               <FontAwesomeIcon icon={faCalendarCheck} className="mr-2" />
               Commencer gratuitement
             </Link>
@@ -212,43 +197,3 @@ export default function Home() {
     </div>
   );
 }
-// Type pour les props de FeatureCard
-interface FeatureCardProps {
-  title: string;
-  description: string;
-  icon: IconDefinition;
-}
-
-const FeatureCard = ({ title, description, icon }: FeatureCardProps) => (
-  <motion.div 
-    className="bg-gray-700 bg-opacity-50 p-6 rounded-3xl shadow-2xl backdrop-blur-lg"
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    whileHover={{ scale: 1.05 }}
-  >
-    <FontAwesomeIcon icon={icon} className="text-4xl mb-4 text-blue-400" />
-    <h3 className="text-xl font-semibold mb-2">{title}</h3>
-    <p className="text-gray-300">{description}</p>
-  </motion.div>
-);
-
-// Type pour les props de TestimonialCard
-interface TestimonialCardProps {
-  quote: string;
-  author: string;
-}
-
-const TestimonialCard = ({ quote, author }: TestimonialCardProps) => (
-  <motion.div 
-    className="bg-gray-700 bg-opacity-50 p-6 rounded-3xl shadow-2xl backdrop-blur-lg"
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5 }}
-  >
-    <blockquote className="text-lg italic mb-4">{quote}</blockquote>
-    <p className="text-gray-400">- {author}</p>
-  </motion.div>
-);
-
-export { FeatureCard, TestimonialCard };
