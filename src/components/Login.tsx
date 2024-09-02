@@ -73,7 +73,7 @@ const Login: React.FC = () => {
         </div>
       </form>
       <p className="text-center text-gray-500 text-xs">
-        Pas encore de compte? <Link href="/register" className="text-blue-500 hover:text-blue-800 transition duration-300">S'inscrire</Link>
+        Pas encore de compte? <Link href="/register" className="text-blue-500 hover:text-blue-800 transition duration-300">S&apos;inscrire</Link>
       </p>
     </div>
   );

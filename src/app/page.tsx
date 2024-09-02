@@ -60,8 +60,10 @@ export default function Home() {
     const interval = setInterval(() => {
       setActiveTip((prevTip) => (prevTip + 1) % tips.length);
     }, 5000);
+    
     return () => clearInterval(interval);
-  }, []);
+  }, [tips.length]); // Ajout de tips.length (pour deploiment)
+  
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 text-white">
@@ -136,7 +138,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
                 <FontAwesomeIcon icon={faUsers} className="text-6xl mb-6 text-purple-500" />
-                <p className="text-xl mb-6">Connectez-vous avec d'autres passionnés de fitness, partagez vos succès et motivez-vous mutuellement.</p>
+                <p className="text-xl mb-6">Connectez-vous avec d&apos;autres passionnés de fitness, partagez vos succès et motivez-vous mutuellement.</p>
                 <Link href="/community" className="bg-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-lg">
                   Explorer la communauté
                 </Link>
@@ -185,7 +187,7 @@ export default function Home() {
         <section className="py-20 bg-blue-600">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-4xl font-bold mb-6">Prêt à transformer votre vie ?</h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">Rejoignez FitTrack aujourd'hui et commencez votre voyage vers une meilleure version de vous-même.</p>
+            <p className="text-xl mb-8 max-w-2xl mx-auto">Rejoignez FitTrack aujourd&apos;hui et commencez votre voyage vers une meilleure version de vous-même.</p>
             <Link href="/register" className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg inline-flex items-center">
               <FontAwesomeIcon icon={faCalendarCheck} className="mr-2" />
               Commencer gratuitement

@@ -80,7 +80,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Légal</h4>
             <ul className="space-y-2">
               <FooterLink href="/privacy">Politique de confidentialité</FooterLink>
-              <FooterLink href="/terms">Conditions d'utilisation</FooterLink>
+              <FooterLink href="/terms">Conditions d&apos;utilisation</FooterLink>
               <FooterLink href="/cookies">Politique des cookies</FooterLink>
             </ul>
           </div>

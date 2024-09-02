@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faDumbbell, faTrophy, faBell, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -31,16 +31,8 @@ const WorkoutsPage: React.FC = () => {
     workoutsByType: {},
   });
 
-  useEffect(() => {
-    localStorage.setItem('workouts', JSON.stringify(workouts));
-    updateWorkoutStats();
-  }, [workouts]);
-
-  useEffect(() => {
-    updateWorkoutStats();
-  }, [workouts]);
-
-  const updateWorkoutStats = () => {
+  // Utilisation de useCallback pour éviter les rendus inutiles
+  const updateWorkoutStats = useCallback(() => {
     const stats: WorkoutStats = {
       totalWorkouts: workouts.length,
       uniqueWorkoutTypes: new Set(workouts.map(w => w.exercise)).size,
@@ -52,7 +44,13 @@ const WorkoutsPage: React.FC = () => {
       }, {} as Record<string, number>),
     };
     setWorkoutStats(stats);
-  };
+  }, [workouts]);
+
+  // Met à jour le stockage local et les statistiques des entraînements
+  useEffect(() => {
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+    updateWorkoutStats();
+  }, [workouts, updateWorkoutStats]); // Inclure updateWorkoutStats dans le tableau des dépendances
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -117,7 +115,7 @@ const WorkoutsPage: React.FC = () => {
           >
             <h2 className="text-3xl font-semibold mb-6 flex items-center">
               <FontAwesomeIcon icon={faCalendarAlt} className="mr-4 text-blue-400" />
-              Calendrier d'entraînement
+              Calendrier d&apos;entraînement
             </h2>
             <div className="grid place-items-center">
               <Calendar 
@@ -203,39 +201,39 @@ const WorkoutsPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
             <h2 className="text-3xl font-semibold mb-6 flex items-center">
               <FontAwesomeIcon icon={faTrophy} className="mr-4 text-yellow-400" />
-              Statistiques d'entraînement
+              Statistiques
             </h2>
-            <ul className="space-y-4">
-              <li>Total des entraînements: {workoutStats.totalWorkouts}</li>
-              <li>Types d'entraînements uniques: {workoutStats.uniqueWorkoutTypes}</li>
-              <li>Durée totale: {workoutStats.totalDuration} minutes</li>
-              <li>Durée moyenne: {workoutStats.averageDuration.toFixed(2)} minutes</li>
-            </ul>
+            <div className="text-lg">
+              <p>Total des entraînements : {workoutStats.totalWorkouts}</p>
+              <p>Types d&apos;entraînements uniques : {workoutStats.uniqueWorkoutTypes}</p>
+              <p>Durée totale : {workoutStats.totalDuration} min</p>
+              <p>Durée moyenne : {workoutStats.averageDuration.toFixed(2)} min</p>
+              <p>Entraînements par type : </p>
+              <ul>
+                {Object.entries(workoutStats.workoutsByType).map(([type, count]) => (
+                  <li key={type}>{type} : {count}</li>
+                ))}
+              </ul>
+            </div>
           </motion.section>
-          
+
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
             <h2 className="text-3xl font-semibold mb-6 flex items-center">
               <FontAwesomeIcon icon={faBell} className="mr-4 text-red-400" />
-              Entraînements par type
+              Notifications
             </h2>
-            <ul className="space-y-4">
-              {Object.entries(workoutStats.workoutsByType).map(([type, count]) => (
-                <li key={type}>
-                  {type}: {count}
-                </li>
-              ))}
-            </ul>
+            <p>Vous pouvez ajouter des notifications ici pour vous rappeler vos prochains entraînements ou objectifs.</p>
           </motion.section>
         </div>
       </main>

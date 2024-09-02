@@ -2,14 +2,23 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faTrophy, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
+// Déclarez un type pour les types de notification
+type NotificationType = 'reminder' | 'achievement' | 'info';
+
+interface Notification {
+  id: number;
+  message: string;
+  type: NotificationType;
+}
+
 const Notifications = () => {
-  const notifications = [
+  const notifications: Notification[] = [
     { id: 1, message: "N'oubliez pas votre séance de course à 18h!", type: 'reminder' },
     { id: 2, message: "Bravo ! Vous avez atteint votre objectif de méditation.", type: 'achievement' },
     { id: 3, message: "Nouvelle recette protéinée disponible !", type: 'info' },
   ];
 
-  const getIcon = (type) => {
+  const getIcon = (type: NotificationType) => {
     switch (type) {
       case 'reminder': return faBell;
       case 'achievement': return faTrophy;
