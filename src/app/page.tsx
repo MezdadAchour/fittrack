@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'; //type pour les icons
 import { faDumbbell, faBullseye, faChartLine, faUsers, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -77,7 +77,7 @@ const FluidBackground: React.FC = () => (
         </filter>
       </defs>
       <g filter="url(#goo)">
-        {[...Array(20)].map((_, index) => (
+        {[...Array(40)].map((_, index) => (  // Augmentation du nombre de cercles
           <circle
             key={index}
             cx={Math.random() * 100 + "%"}
@@ -89,14 +89,14 @@ const FluidBackground: React.FC = () => (
               attributeName="cx"
               from={Math.random() * 100 + "%"}
               to={Math.random() * 100 + "%"}
-              dur={Math.random() * 10 + 10 + "s"}
+              dur={Math.random() * 10 + 10 + "s"}  // Durée rétablie
               repeatCount="indefinite"
             />
             <animate
               attributeName="cy"
               from={Math.random() * 100 + "%"}
               to={Math.random() * 100 + "%"}
-              dur={Math.random() * 10 + 10 + "s"}
+              dur={Math.random() * 10 + 10 + "s"}  // Durée rétablie
               repeatCount="indefinite"
             />
           </circle>
@@ -105,6 +105,7 @@ const FluidBackground: React.FC = () => (
     </svg>
   </div>
 );
+
 
 // Composant principal de la page d'accueil
 export default function Home() {
