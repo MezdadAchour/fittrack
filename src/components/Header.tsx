@@ -18,7 +18,7 @@ const NavLink = ({ href, children, mobile = false }: NavLinkProps) => (
   <Link href={href} passHref legacyBehavior>
     <motion.a
       whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.90 }}
       className={`block ${mobile ? 'py-2' : 'px-4'} text-gray-300 hover:text-white transition duration-200`}
     >
       {children}
