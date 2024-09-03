@@ -77,7 +77,7 @@ const FluidBackground: React.FC = () => (
         </filter>
       </defs>
       <g filter="url(#goo)">
-        {[...Array(40)].map((_, index) => (  // Augmentation du nombre de cercles
+        {[...Array(40)].map((_, index) => (  
           <circle
             key={index}
             cx={Math.random() * 100 + "%"}
@@ -89,14 +89,14 @@ const FluidBackground: React.FC = () => (
               attributeName="cx"
               from={Math.random() * 100 + "%"}
               to={Math.random() * 100 + "%"}
-              dur={Math.random() * 10 + 10 + "s"}  // Durée rétablie
+              dur={Math.random() * 10 + 10 + "s"}  
               repeatCount="indefinite"
             />
             <animate
               attributeName="cy"
               from={Math.random() * 100 + "%"}
               to={Math.random() * 100 + "%"}
-              dur={Math.random() * 10 + 10 + "s"}  // Durée rétablie
+              dur={Math.random() * 10 + 10 + "s"}  
               repeatCount="indefinite"
             />
           </circle>
