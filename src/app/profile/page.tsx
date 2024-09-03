@@ -9,7 +9,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-// Définir les types pour les props de InputField
+// Définition des types pour les props de InputField
 interface InputFieldProps {
   icon: IconDefinition;
   name: string;
@@ -17,7 +17,7 @@ interface InputFieldProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-// Définir les types pour les props de InfoField
+// Définition des types pour les props de InfoField
 interface InfoFieldProps {
   icon: IconDefinition;
   label: string;
@@ -25,6 +25,7 @@ interface InfoFieldProps {
 }
 
 const ProfilePage: React.FC = () => {
+  // État pour le mode d'édition et les informations de l'utilisateur
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: 'John Doe',
@@ -34,6 +35,7 @@ const ProfilePage: React.FC = () => {
     height: 175
   });
 
+  // Données pour le graphique de poids
   const weightData = [
     { date: '1 Jan', weight: 72 },
     { date: '1 Feb', weight: 71 },
@@ -42,10 +44,12 @@ const ProfilePage: React.FC = () => {
     { date: '1 May', weight: 69 },
   ];
 
+  // Basculement du mode d'édition
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
   };
 
+  // Mise à jour des informations de l'utilisateur
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo(prevInfo => ({
@@ -58,6 +62,7 @@ const ProfilePage: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 text-white">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
+        {/* Titre animé */}
         <motion.h1
           className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
           initial={{ opacity: 0, y: -50 }}
@@ -79,6 +84,7 @@ const ProfilePage: React.FC = () => {
               <FontAwesomeIcon icon={faUser} className="mr-3 text-blue-400" />
               Informations du Profil
             </h2>
+            {/* Affichage conditionnel : formulaire d'édition ou informations */}
             {isEditing ? (
               <div className="space-y-4">
                 <InputField icon={faUser} name="name" value={userInfo.name} onChange={handleInputChange} />
@@ -126,6 +132,7 @@ const ProfilePage: React.FC = () => {
               <FontAwesomeIcon icon={faTachometerAlt} className="mr-3 text-green-400" />
               Évolution du Poids
             </h2>
+            {/* Graphique de l'évolution du poids */}
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={weightData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -143,7 +150,7 @@ const ProfilePage: React.FC = () => {
   );
 };
 
-
+// Composant pour les champs de saisie
 const InputField: React.FC<InputFieldProps> = ({ icon, name, value, onChange }) => (
   <div className="relative">
     <FontAwesomeIcon icon={icon} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -157,7 +164,7 @@ const InputField: React.FC<InputFieldProps> = ({ icon, name, value, onChange }) 
   </div>
 );
 
-
+// Composant pour l'affichage des informations en mode lecture
 const InfoField: React.FC<InfoFieldProps> = ({ icon, label, value }) => (
   <div className="flex items-center space-x-3">
     <FontAwesomeIcon icon={icon} className="text-gray-400" />

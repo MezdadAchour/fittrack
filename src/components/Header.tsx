@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
+// Interface pour les propriétés des liens de navigation
 interface NavLinkProps {
   href: string;
   children: React.ReactNode;
   mobile?: boolean;
 }
 
+// Composant pour les liens de navigation
 const NavLink = ({ href, children, mobile = false }: NavLinkProps) => (
   <Link href={href} passHref legacyBehavior>
     <motion.a
@@ -24,12 +26,15 @@ const NavLink = ({ href, children, mobile = false }: NavLinkProps) => (
   </Link>
 );
 
+// Composant Header principal
 const Header = () => {
+  // État pour gérer l'ouverture/fermeture du menu mobile
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="bg-gray-800 bg-opacity-70 backdrop-blur-lg shadow-xl text-white sticky top-0 z-50">
       <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+        {/* Logo */}
         <Link href="/" passHref legacyBehavior>
           <motion.a
             whileHover={{ scale: 1.05 }}
@@ -38,12 +43,14 @@ const Header = () => {
             FitTrack
           </motion.a>
         </Link>
+        {/* Navigation pour desktop */}
         <nav className="hidden md:flex space-x-4">
           <NavLink href="/">Accueil</NavLink>
           <NavLink href="/workouts">Entraînements</NavLink>
           <NavLink href="/stats">Statistiques</NavLink>
           <NavLink href="/profile">Profil</NavLink>
         </nav>
+        {/* Bouton pour le menu mobile */}
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="md:hidden focus:outline-none"
@@ -53,6 +60,7 @@ const Header = () => {
           <FontAwesomeIcon icon={faBars} className="w-6 h-6 text-gray-300" />
         </button>
       </div>
+      {/* Menu mobile */}
       <motion.div
         id="mobile-menu"
         initial={false}

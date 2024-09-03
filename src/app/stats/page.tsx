@@ -9,7 +9,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Workout, WorkoutStats } from '@/utils/types';
 
+// Composant principal pour la page des statistiques
 const StatisticsPage: React.FC = () => {
+  // États pour stocker les statistiques et les entraînements
   const [stats, setStats] = useState<WorkoutStats>({
     totalWorkouts: 0,
     uniqueWorkoutTypes: 0,
@@ -19,12 +21,14 @@ const StatisticsPage: React.FC = () => {
   });
   const [workouts, setWorkouts] = useState<Workout[]>([]);
 
+  // Chargement des données au montage du composant
   useEffect(() => {
     const loadedWorkouts = JSON.parse(localStorage.getItem('workouts') || '[]') as Workout[];
     setWorkouts(loadedWorkouts);
     updateStats(loadedWorkouts);
   }, []);
 
+  // Mise à jour des statistiques
   const updateStats = (workouts: Workout[]) => {
     const newStats: WorkoutStats = {
       totalWorkouts: workouts.length,
@@ -39,6 +43,7 @@ const StatisticsPage: React.FC = () => {
     setStats(newStats);
   };
 
+  // Préparation des données pour les graphiques
   const chartData = Object.entries(stats.workoutsByType).map(([type, count]) => ({
     name: type,
     value: count
@@ -55,6 +60,7 @@ const StatisticsPage: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 text-white">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
+        {/* Titre animé */}
         <motion.h1 
           className="text-5xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
           initial={{ opacity: 0, y: -50 }}
@@ -64,6 +70,7 @@ const StatisticsPage: React.FC = () => {
           Statistiques d&apos;Entraînement
         </motion.h1>
 
+        {/* Cartes de statistiques */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <StatCard
             icon={faChartBar}
@@ -91,7 +98,9 @@ const StatisticsPage: React.FC = () => {
           />
         </div>
 
+        {/* Graphiques */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Graphique en barres : Répartition des entraînements */}
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
             initial={{ opacity: 0, y: 50 }}
@@ -112,6 +121,7 @@ const StatisticsPage: React.FC = () => {
             </ResponsiveContainer>
           </motion.section>
 
+          {/* Graphique en ligne : Évolution de la durée des entraînements */}
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
             initial={{ opacity: 0, y: 50 }}
@@ -133,6 +143,7 @@ const StatisticsPage: React.FC = () => {
           </motion.section>
         </div>
 
+        {/* Liste des entraînements récents */}
         <motion.section 
           className="mt-12 bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
           initial={{ opacity: 0, y: 50 }}
@@ -159,6 +170,7 @@ const StatisticsPage: React.FC = () => {
   );
 };
 
+// Composant pour afficher une carte de statistique
 const StatCard: React.FC<{ icon: any; title: string; value: number | string; color: string }> = ({ icon, title, value, color }) => (
   <motion.div 
     className={`bg-gray-800 bg-opacity-50 p-6 rounded-2xl shadow-lg backdrop-blur-sm`}

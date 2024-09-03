@@ -10,6 +10,7 @@ import { faDumbbell, faBullseye, faChartLine, faUsers, faCalendarCheck } from '@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+// Interface pour définir les props de FeatureCard
 interface FeatureCardProps {
   title: string;
   description: string;
@@ -17,6 +18,7 @@ interface FeatureCardProps {
   imageSrc: string;
 }
 
+// Composant FeatureCard pour afficher les fonctionnalités
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, imageSrc }) => (
   <motion.div 
     className="bg-gray-800 bg-opacity-50 p-6 rounded-3xl shadow-2xl backdrop-blur-lg overflow-hidden relative group h-[500px]"
@@ -38,13 +40,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, ima
   </motion.div>
 );
 
-
+// Interface pour définir les props de TestimonialCard
 interface TestimonialCardProps {
   quote: string;
   author: string;
   imageSrc: string;
 }
 
+// Composant TestimonialCard pour afficher les témoignages
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author, imageSrc }) => (
   <motion.div 
     className="bg-gray-800 bg-opacity-50 p-6 rounded-3xl shadow-2xl backdrop-blur-lg relative overflow-hidden group h-[500px]"
@@ -62,7 +65,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, author, imageS
   </motion.div>
 );
 
-
+// Composant pour l'arrière-plan fluide
 const FluidBackground: React.FC = () => (
   <div className="absolute inset-0 overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-purple-900 opacity-50" />
@@ -103,7 +106,9 @@ const FluidBackground: React.FC = () => (
   </div>
 );
 
+// Composant principal de la page d'accueil
 export default function Home() {
+  // État pour gérer les conseils affichés
   const [activeTip, setActiveTip] = useState(0);
   const tips = [
     "Commencez doucement et augmentez progressivement l'intensité.",
@@ -113,6 +118,7 @@ export default function Home() {
     "Fixez-vous des objectifs réalistes et mesurables."
   ];
 
+  // Effet pour changer automatiquement les conseils
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveTip((prevTip) => (prevTip + 1) % tips.length);
@@ -126,7 +132,7 @@ export default function Home() {
       <FluidBackground />
       <Header />
       <main className="flex-grow relative z-10">
-        {/* Hero Section */}
+        {/* Section Hero */}
         <section className="h-screen relative flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0">
             <Image src="/images/statue1.jpg" alt="Hero background" layout="fill" objectFit="cover" className="opacity-30" />
@@ -164,7 +170,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Section Fonctionnalités */}
         <section className="py-20 relative overflow-hidden">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">Fonctionnalités principales</h2>
@@ -191,7 +197,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Community Section */}
+        {/* Section Communauté */}
         <section className="py-20 relative overflow-hidden">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">Rejoignez notre communauté</h2>
@@ -226,7 +232,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Testimonial Section */}
+        {/* Section Témoignages */}
         <section className="py-20 relative overflow-hidden">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">Ce que disent nos utilisateurs</h2>
@@ -250,7 +256,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* call to action Section */}
         <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
           <div className="container mx-auto px-4 text-center relative z-10">
             <h2 className="text-4xl font-bold mb-6">Prêt à transformer votre vie ?</h2>

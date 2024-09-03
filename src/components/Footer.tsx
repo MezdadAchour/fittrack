@@ -1,11 +1,20 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+// Types pour les props des composants FooterLink et SocialLink
 interface FooterLinkProps {
   href: string;
   children: React.ReactNode;
 }
 
+interface SocialLinkProps {
+  href: string;
+  aria: string;
+  children: React.ReactNode;
+}
+
+// Composant pour les liens du footer
+// Utilisation de motion pour l'animation au survol
 const FooterLink = ({ href, children }: FooterLinkProps) => (
   <li>
     <Link href={href} passHref legacyBehavior>
@@ -19,12 +28,8 @@ const FooterLink = ({ href, children }: FooterLinkProps) => (
   </li>
 );
 
-interface SocialLinkProps {
-  href: string;
-  aria: string;
-  children: React.ReactNode;
-}
-
+// Composant pour les liens des réseaux sociaux
+// Animation au survol vers le haut
 const SocialLink = ({ href, aria, children }: SocialLinkProps) => (
   <motion.a
     href={href}
@@ -38,13 +43,17 @@ const SocialLink = ({ href, aria, children }: SocialLinkProps) => (
   </motion.a>
 );
 
+// Composant principal du footer
 const Footer = () => {
+  // Récupération de l'année en cours pour le copyright
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-gray-900 text-white mt-auto">
       <div className="container mx-auto px-4 py-8">
+        {/* Grille responsive pour le contenu du footer */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Section logo et description */}
           <div>
             <motion.h3 
               className="text-xl font-bold mb-4"
@@ -58,6 +67,8 @@ const Footer = () => {
               Votre compagnon fitness personnel pour atteindre vos objectifs.
             </p>
           </div>
+          
+          {/* Sections de liens */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Liens rapides</h4>
             <ul className="space-y-2">

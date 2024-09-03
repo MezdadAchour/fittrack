@@ -12,9 +12,12 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Workout, WorkoutStats } from '@/utils/types';
 
+// Composant principal de la page des entraînements
 const WorkoutsPage: React.FC = () => {
+  // États pour gérer les données et l'interface utilisateur
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [workouts, setWorkouts] = useState<Workout[]>(() => {
+    // Initialisation des entraînements depuis le localStorage
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('workouts');
       return saved ? JSON.parse(saved) : [];
@@ -31,7 +34,7 @@ const WorkoutsPage: React.FC = () => {
     workoutsByType: {},
   });
 
-  // Utilisation de useCallback pour éviter les rendus inutiles
+  // Fonction pour mettre à jour les statistiques des entraînements
   const updateWorkoutStats = useCallback(() => {
     const stats: WorkoutStats = {
       totalWorkouts: workouts.length,
@@ -46,18 +49,20 @@ const WorkoutsPage: React.FC = () => {
     setWorkoutStats(stats);
   }, [workouts]);
 
-  // Met à jour le stockage local et les statistiques des entraînements
+  // Effet pour sauvegarder les entraînements dans le localStorage et mettre à jour les stats
   useEffect(() => {
     localStorage.setItem('workouts', JSON.stringify(workouts));
     updateWorkoutStats();
-  }, [workouts, updateWorkoutStats]); // Inclure updateWorkoutStats dans le tableau des dépendances
+  }, [workouts, updateWorkoutStats]);
 
+  // Gestion du changement de date dans le calendrier
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
     setIsFormVisible(true);
     setEditingWorkout(null);
   };
 
+  // Ajout d'un nouvel entraînement
   const handleAddWorkout = (workout: Omit<Workout, 'id' | 'date'>) => {
     const newWorkout: Workout = {
       ...workout,
@@ -68,16 +73,19 @@ const WorkoutsPage: React.FC = () => {
     setIsFormVisible(false);
   };
 
+  // Suppression d'un entraînement
   const handleDeleteWorkout = (id: string) => {
     setWorkouts(prevWorkouts => prevWorkouts.filter(workout => workout.id !== id));
   };
 
+  // Début de l'édition d'un entraînement
   const handleStartEditWorkout = (workout: Workout) => {
     setEditingWorkout(workout);
     setSelectedDate(new Date(workout.date));
     setIsFormVisible(true);
   };
 
+  // Mise à jour d'un entraînement existant
   const handleEditWorkout = (updatedWorkout: Omit<Workout, 'id'>) => {
     setWorkouts(prevWorkouts =>
       prevWorkouts.map(workout =>
@@ -88,6 +96,7 @@ const WorkoutsPage: React.FC = () => {
     setIsFormVisible(false);
   };
 
+  // Annulation de l'édition
   const handleCancelEdit = () => {
     setEditingWorkout(null);
     setIsFormVisible(false);
@@ -97,6 +106,7 @@ const WorkoutsPage: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 text-white">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12">
+        {/* Titre animé */}
         <motion.h1 
           className="text-5xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600"
           initial={{ opacity: 0, y: -50 }}
@@ -107,6 +117,7 @@ const WorkoutsPage: React.FC = () => {
         </motion.h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Section du calendrier */}
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
             initial={{ opacity: 0, x: -50 }}
@@ -127,6 +138,7 @@ const WorkoutsPage: React.FC = () => {
             </div>
           </motion.section>
           
+          {/* Section du formulaire d'entraînement (visible/caché dynamiquement) */}
           <AnimatePresence>
             {isFormVisible ? (
               <motion.section
@@ -149,6 +161,7 @@ const WorkoutsPage: React.FC = () => {
                 />
               </motion.section>
             ) : (
+              // Bouton pour afficher le formulaire quand il est caché
               <motion.div
                 className="flex items-center justify-center h-full"
                 initial={{ opacity: 0 }}
@@ -170,6 +183,7 @@ const WorkoutsPage: React.FC = () => {
           </AnimatePresence>
         </div>
 
+        {/* Liste des entraînements */}
         <motion.section 
           className="mt-12 bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
           initial={{ opacity: 0, y: 50 }}
@@ -199,6 +213,7 @@ const WorkoutsPage: React.FC = () => {
         </motion.section>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+          {/* Section des statistiques */}
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
             initial={{ opacity: 0, x: -50 }}
@@ -223,6 +238,7 @@ const WorkoutsPage: React.FC = () => {
             </div>
           </motion.section>
 
+          {/* Section des notifications (à implémenter) */}
           <motion.section 
             className="bg-gray-800 bg-opacity-50 p-8 rounded-3xl shadow-2xl backdrop-blur-lg"
             initial={{ opacity: 0, x: 50 }}
