@@ -107,7 +107,7 @@ const FluidBackground: React.FC = () => (
 );
 
 
-// Composant principal de la page d'accueil
+
 export default function Home() {
   // État pour gérer les conseils affichés
   const [activeTip, setActiveTip] = useState(0);
