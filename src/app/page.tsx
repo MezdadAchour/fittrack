@@ -206,7 +206,7 @@ export default function Home() {
               <div>
                 <FontAwesomeIcon icon={faUsers} className="text-6xl mb-6 text-purple-500" />
                 <p className="text-xl mb-6">Connectez-vous avec d&apos;autres passionnés de fitness, partagez vos succès et motivez-vous mutuellement.</p>
-                <Link href="/community" className="bg-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-lg inline-block">
+                <Link href="https://www.gornation.com/fr/blogs/news" className="bg-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-700 transition duration-300 shadow-lg inline-block">
                   Explorer la communauté
                 </Link>
               </div>
@@ -251,7 +251,7 @@ export default function Home() {
               <TestimonialCard 
                 quote="La communauté FitTrack est incroyablement motivante. J'adore partager mes progrès et encourager les autres."
                 author="Sophie M., utilisatrice depuis 3 mois"
-                imageSrc="/images/statue1.jpg"
+                imageSrc="/images/statue8.jpg"
               />
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function Home() {
           <div className="container mx-auto px-4 text-center relative z-10">
             <h2 className="text-4xl font-bold mb-6">Prêt à transformer votre vie ?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto">Rejoignez FitTrack aujourd&apos;hui et commencez votre voyage vers une meilleure version de vous-même.</p>
-            <Link href="/register" className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg inline-flex items-center">
+            <Link href="/register" className="bg-white text-blue-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-200 transition duration-300 shadow-lg inline-flex items-center">
               <FontAwesomeIcon icon={faCalendarCheck} className="mr-2" />
               Commencer gratuitement
             </Link>
